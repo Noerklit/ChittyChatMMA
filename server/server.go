@@ -67,7 +67,7 @@ func (j *ChittyChatServer) JoinChat(user *proto.User, ccsi proto.ChittyChatServi
 	return nil
 }
 
-func (l *ChittyChatServer) LeaveChat(ctx context.Context, user *proto.User) (*proto.Empty, error) {
+func (s *ChittyChatServer) LeaveChat(ctx context.Context, user *proto.User) (*proto.Empty, error) {
 	incomingLamport := user.Lamport
 	lamport = max(lamport, incomingLamport)
 	lamport++
@@ -76,7 +76,7 @@ func (l *ChittyChatServer) LeaveChat(ctx context.Context, user *proto.User) (*pr
 	delete(users, user.Id)
 
 	//Update the timestamp
-	Broadcast(&proto.FromClient{Name: "ServerMessage", Content: fmt.Sprintf("%s left the chat", user.Name), Lamport: lamport})
+	Broadcast(&proto.FromClient{Name: "ServerMessage", Content: user.Name + " has left the chat", Lamport: lamport})
 	return &proto.Empty{}, nil
 }
 

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package chittyChat;
+
+option go_package = "grpc/proto";
+
+message FromClient {
+    string name = 1;
+    string content = 2;
+    int64 lamport = 3;
+}
+
+message FromServer {
+    string name = 1;
+    string content = 2;
+    int64 lamport = 3;
+}
+
+message User {
+    int64 id = 1;
+    string name = 2;
+    int64 lamport = 3;  
+}
+
+message Log {
+    repeated string entries = 1;
+}
+
+message Empty {}
+
+service ChittyChatService {
+    rpc JoinChat (User) returns (stream FromServer) {}
+    rpc LeaveChat (User) returns (Empty) {}
+    rpc PublishMessage (FromClient) returns (Empty) {}
+    rpc GetLog(Empty) returns (Log) {}
+}

@@ -21,9 +21,9 @@ import (
 var lamport int64
 
 type Client struct {
-	stream 		proto.ChittyChatService_JoinChatClient
-	Id    		int64
-	clientName  string
+	stream     proto.ChittyChatService_JoinChatClient
+	Id         int64
+	clientName string
 }
 
 func main() {
@@ -34,7 +34,7 @@ func main() {
 	// Set up a connection to the server.
 	log.Println("Connecting to: " + serverID)
 	conn, err := grpc.Dial("localhost:50051", grpc.WithTransportCredentials(insecure.NewCredentials()))
-	
+
 	if err != nil {
 		log.Fatalf("Could not connect to gRPC server: %v", err)
 	}
@@ -51,8 +51,8 @@ func main() {
 
 	lamport++
 	var user = proto.User{
-		Id:	  ch.Id,
-		Name: ch.clientName,
+		Id:      ch.Id,
+		Name:    ch.clientName,
 		Lamport: lamport,
 	}
 
@@ -74,7 +74,7 @@ func main() {
 	<-bl
 }
 
-//Function to assign a name to the client
+// Function to assign a name to the client
 func (ch *Client) clientConfig() {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("Enter your name: ")
@@ -83,7 +83,7 @@ func (ch *Client) clientConfig() {
 		log.Fatalf("Failed to read client name from console: %v", err)
 	}
 	//Remove the carriage return \r and newline characters \n
-	ch.clientName = strings.TrimRight(msg, "\r\n") 
+	ch.clientName = strings.TrimRight(msg, "\r\n")
 }
 
 func (ch *Client) sendMessage(client proto.ChittyChatServiceClient) {
@@ -96,9 +96,8 @@ func (ch *Client) sendMessage(client proto.ChittyChatServiceClient) {
 			continue
 		}
 		if len(clientMessage) > 0 && len(clientMessage) <= 128 {
-			lamport++
-			msg := proto.FromClient {
-				Name: ch.clientName,
+			msg := proto.FromClient{
+				Name:    ch.clientName,
 				Content: clientMessage,
 				Lamport: lamport,
 			}
@@ -120,10 +119,9 @@ func (ch *Client) receiveMessage() {
 		if err != nil {
 			log.Printf("Could not receive: %v", err)
 		}
-		
+
 		incomingLamport := resp.Lamport
 		lamport = max(lamport, incomingLamport)
-		lamport++
 
 		log.Printf("%s: %s", resp.Name, resp.Content)
 	}

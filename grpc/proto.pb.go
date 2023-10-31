@@ -360,11 +360,9 @@ var file_grpc_proto_proto_depIdxs = []int32{
 	2, // 0: chittyChat.ChittyChatService.JoinChat:input_type -> chittyChat.User
 	2, // 1: chittyChat.ChittyChatService.LeaveChat:input_type -> chittyChat.User
 	0, // 2: chittyChat.ChittyChatService.PublishMessage:input_type -> chittyChat.FromClient
-	4, // 3: chittyChat.ChittyChatService.GetLog:input_type -> chittyChat.Empty
 	1, // 4: chittyChat.ChittyChatService.JoinChat:output_type -> chittyChat.FromServer
 	4, // 5: chittyChat.ChittyChatService.LeaveChat:output_type -> chittyChat.Empty
 	4, // 6: chittyChat.ChittyChatService.PublishMessage:output_type -> chittyChat.Empty
-	3, // 7: chittyChat.ChittyChatService.GetLog:output_type -> chittyChat.Log
 	4, // [4:8] is the sub-list for method output_type
 	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

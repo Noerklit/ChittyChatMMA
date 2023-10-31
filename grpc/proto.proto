@@ -32,5 +32,4 @@ service ChittyChatService {
     rpc JoinChat (User) returns (stream FromServer) {}
     rpc LeaveChat (User) returns (Empty) {}
     rpc PublishMessage (FromClient) returns (Empty) {}
-    rpc GetLog(Empty) returns (Log) {}
 }

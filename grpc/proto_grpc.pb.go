@@ -22,7 +22,6 @@ const (
 	ChittyChatService_JoinChat_FullMethodName       = "/chittyChat.ChittyChatService/JoinChat"
 	ChittyChatService_LeaveChat_FullMethodName      = "/chittyChat.ChittyChatService/LeaveChat"
 	ChittyChatService_PublishMessage_FullMethodName = "/chittyChat.ChittyChatService/PublishMessage"
-	ChittyChatService_GetLog_FullMethodName         = "/chittyChat.ChittyChatService/GetLog"
 )
 
 // ChittyChatServiceClient is the client API for ChittyChatService service.
@@ -32,7 +31,6 @@ type ChittyChatServiceClient interface {
 	JoinChat(ctx context.Context, in *User, opts ...grpc.CallOption) (ChittyChatService_JoinChatClient, error)
 	LeaveChat(ctx context.Context, in *User, opts ...grpc.CallOption) (*Empty, error)
 	PublishMessage(ctx context.Context, in *FromClient, opts ...grpc.CallOption) (*Empty, error)
-	GetLog(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Log, error)
 }
 
 type chittyChatServiceClient struct {
@@ -93,15 +91,6 @@ func (c *chittyChatServiceClient) PublishMessage(ctx context.Context, in *FromCl
 	return out, nil
 }
 
-func (c *chittyChatServiceClient) GetLog(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*Log, error) {
-	out := new(Log)
-	err := c.cc.Invoke(ctx, ChittyChatService_GetLog_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ChittyChatServiceServer is the server API for ChittyChatService service.
 // All implementations must embed UnimplementedChittyChatServiceServer
 // for forward compatibility
@@ -109,7 +98,6 @@ type ChittyChatServiceServer interface {
 	JoinChat(*User, ChittyChatService_JoinChatServer) error
 	LeaveChat(context.Context, *User) (*Empty, error)
 	PublishMessage(context.Context, *FromClient) (*Empty, error)
-	GetLog(context.Context, *Empty) (*Log, error)
 	mustEmbedUnimplementedChittyChatServiceServer()
 }
 
@@ -125,9 +113,6 @@ func (UnimplementedChittyChatServiceServer) LeaveChat(context.Context, *User) (*
 }
 func (UnimplementedChittyChatServiceServer) PublishMessage(context.Context, *FromClient) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PublishMessage not implemented")
-}
-func (UnimplementedChittyChatServiceServer) GetLog(context.Context, *Empty) (*Log, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLog not implemented")
 }
 func (UnimplementedChittyChatServiceServer) mustEmbedUnimplementedChittyChatServiceServer() {}
 
@@ -199,24 +184,6 @@ func _ChittyChatService_PublishMessage_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ChittyChatService_GetLog_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ChittyChatServiceServer).GetLog(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: ChittyChatService_GetLog_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ChittyChatServiceServer).GetLog(ctx, req.(*Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // ChittyChatService_ServiceDesc is the grpc.ServiceDesc for ChittyChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -231,10 +198,6 @@ var ChittyChatService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PublishMessage",
 			Handler:    _ChittyChatService_PublishMessage_Handler,
-		},
-		{
-			MethodName: "GetLog",
-			Handler:    _ChittyChatService_GetLog_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

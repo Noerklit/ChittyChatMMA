@@ -96,6 +96,7 @@ func (ch *Client) sendMessage(client proto.ChittyChatServiceClient) {
 			continue
 		}
 		if len(clientMessage) > 0 && len(clientMessage) <= 128 {
+			lamport++
 			msg := proto.FromClient{
 				Name:    ch.clientName,
 				Content: clientMessage,
@@ -122,8 +123,9 @@ func (ch *Client) receiveMessage() {
 
 		incomingLamport := resp.Lamport
 		lamport = max(lamport, incomingLamport)
+		lamport++
 
-		log.Printf("%s: %s", resp.Name, resp.Content)
+		log.Printf("%s: %s, %d", resp.Name, resp.Content, resp.Lamport)
 	}
 }
 
@@ -133,7 +135,6 @@ func SetupCloseHandler(ch Client, client proto.ChittyChatServiceClient) {
 	go func() {
 		<-cl
 		fmt.Println("\nClosing connection to server...")
-		lamport++
 		client.LeaveChat(context.Background(), &proto.User{Id: ch.Id, Name: ch.clientName, Lamport: lamport})
 		os.Exit(0)
 	}()

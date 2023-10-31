@@ -72,7 +72,7 @@ func (s *ChittyChatServer) LeaveChat(ctx context.Context, user *proto.User) (*pr
 	lamport = max(lamport, incomingLamport)
 	lamport++
 
-	//Remove the participant 
+	//Remove the participant
 	delete(users, user.Id)
 
 	//Update the timestamp
@@ -101,7 +101,7 @@ func Broadcast(msg *proto.FromClient) {
 	for key, value := range users {
 		err := value.Send(&proto.FromServer{Name: name, Content: content, Lamport: lamport})
 		if err != nil {
-			log.Printf("Failed to broadcast message to" + string(key)+ ": ", err)
+			log.Printf("Failed to broadcast message to"+string(key)+": ", err)
 			log.Printf("Failed to broadcast message to %s: %v", fmt.Sprint(key), err)
 		}
 	}
